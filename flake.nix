@@ -39,7 +39,7 @@
           buildInputs = with pkgs; [
             clojure
             update-deps
-            self.packages."${system}".nexus-keygen
+            # self.packages."${system}".nexus-keygen
           ];
         };
       }) // {
