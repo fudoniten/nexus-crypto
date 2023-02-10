@@ -2,20 +2,27 @@
   (:require [nexus.crypto :as crypto]
             [clojure.tools.cli :as cli]
             [clojure.string :as str]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.pprint :refer [pprint]])
+  (:gen-class))
 
 (def cli-opts
   [["-a" "--algorithm ALGO" "Algorithm key to generate." :default "HmacSHA512"]
    ["-s" "--seed SEED"      "Seed used to generate key."]
    ["-h" "--help"]])
 
+(defn pthru [o]
+  (pprint o)
+  o)
+
 (defn- usage
-  ([summary] (->> ["usage: nexus-generate-key [opts] <FILENAME>"
-                   ""
-                   "Options:"
-                   summary]
-                  (str/join \newline)))
-  ([summary errors] (concat errors [""] summary)))
+  ([summary] (usage summary []))
+  ([summary errors] (->> (concat errors
+                                 ["usage: nexus-generate-key [opts] <FILENAME>"
+                                  ""
+                                  "Options:"
+                                  summary])
+                         (str/join \newline))))
 
 (defn- msg-quit [status msg]
   (println msg)
@@ -30,7 +37,7 @@
     (crypto/generate-key algorithm seed)
     (crypto/generate-key algorithm)))
 
-(defn -main [args]
+(defn -main [& args]
   (let [{:keys [options arguments errors summary]} (cli/parse-opts args cli-opts)]
     (when (seq errors) (msg-quit 1 (usage summary errors)))
     (when (:help options) (msg-quit 0 (usage summary)))

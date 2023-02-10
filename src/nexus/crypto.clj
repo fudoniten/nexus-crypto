@@ -15,12 +15,6 @@
                              (SecureRandom.))]
                  (generate-key-impl algo rng))))
 
-(defn generate-key [algo seed]
-  (let [seed-bytes (.getBytes seed)
-        rng (SecureRandom. seed-bytes)
-        gen (doto (KeyGenerator/getInstance algo) (.init rng))]
-    (.generateKey gen)))
-
 (defn encode-key [key]
   (let [encoded-key (.encodeToString (Base64/getEncoder)
                                      (.getEncoded key))]

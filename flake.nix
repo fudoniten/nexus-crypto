@@ -22,7 +22,7 @@
         packages = {
           nexus-keygen = cljpkgs.mkCljBin {
             projectSrc = ./.;
-            name = "org.fudo/nexus.keygen";
+            name = "org.fudo/nexus-keygen";
             main-ns = "nexus.keygen";
             jdkRunner = pkgs.jdk17_headless;
           };
@@ -39,7 +39,7 @@
           buildInputs = with pkgs; [
             clojure
             update-deps
-            # self.packages."${system}".nexus-keygen
+            self.packages."${system}".nexus-keygen
           ];
         };
       }) // {
