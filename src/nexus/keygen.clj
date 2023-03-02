@@ -2,18 +2,13 @@
   (:require [nexus.crypto :as crypto]
             [clojure.tools.cli :as cli]
             [clojure.string :as str]
-            [clojure.java.io :as io]
-            [clojure.pprint :refer [pprint]])
+            [clojure.java.io :as io])
   (:gen-class))
 
 (def cli-opts
   [["-a" "--algorithm ALGO" "Algorithm key to generate." :default "HmacSHA512"]
    ["-s" "--seed SEED"      "Seed used to generate key."]
    ["-h" "--help"]])
-
-(defn pthru [o]
-  (pprint o)
-  o)
 
 (defn- usage
   ([summary] (usage summary []))
