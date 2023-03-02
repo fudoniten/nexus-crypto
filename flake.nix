@@ -19,6 +19,7 @@
           nexus-keygen = helpers.packages."${system}".mkClojureBin {
             name = "org.fudo/nexus-keygen";
             primaryNamespace = "nexus.keygen";
+            src = ./.;
           };
         };
 
