@@ -18,13 +18,13 @@
       in {
         packages = rec {
           default = nexus-keygen;
-          nexus-keygen-bin = mkClojureBin {
-            name = "org.fudo/nexus-keygen-bin";
+          nexus-keygen = mkClojureBin {
+            name = "org.fudo/nexus-keygen";
             primaryNamespace = "nexus.keygen";
             src = ./.;
           };
-          nexus-keygen = mkClojureLib {
-            name = "org.fudo/nexus-keygen";
+          nexus-crypto = mkClojureLib {
+            name = "org.fudo/nexus.crypto";
             src = ./.;
           };
         };
