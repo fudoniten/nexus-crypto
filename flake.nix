@@ -12,22 +12,28 @@
 
   outputs = { self, nixpkgs, utils, helpers, ... }:
     utils.lib.eachDefaultSystem (system:
-      let pkgs = import nixpkgs { inherit system; };
+      let
+        pkgs = import nixpkgs { inherit system; };
+        inherit (helpers.packages."${system}") mkClojureBin mkClojureLib;
       in {
         packages = rec {
           default = nexus-keygen;
-          nexus-keygen = helpers.packages."${system}".mkClojureBin {
-            name = "org.fudo/nexus-keygen";
+          nexus-keygen-bin = mkClojureBin {
+            name = "org.fudo/nexus-keygen-bin";
             primaryNamespace = "nexus.keygen";
+            src = ./.;
+          };
+          nexus-keygen = mkClojureLib {
+            name = "org.fudo/nexus-keygen";
             src = ./.;
           };
         };
 
         devShells = rec {
-          default = update-deps;
-          update-deps = pkgs.mkShell {
+          default = updateDeps;
+          updateDeps = pkgs.mkShell {
             buildInputs = with helpers.packages."${system}";
-              [ updateClojureDeps ];
+              [ (updateClojureDeps { }) ];
           };
         };
       });
