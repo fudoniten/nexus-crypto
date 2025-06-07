@@ -13,8 +13,6 @@
 (defn- generate-key-impl [algo rng]
   "Generates a cryptographic key using the specified algorithm and random number generator (rng)."
   (log/debug "Generating key with algorithm:" algo)
-  (log/debug "Encoding key:" key)
-  (log/debug "Decoding key string:" key-str)
   (log/debug "Generating signature for data:" data)
   (log/debug "Validating signature for data:" data)
   (try
