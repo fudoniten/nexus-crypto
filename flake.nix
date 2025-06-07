@@ -31,9 +31,12 @@
 
         checks = {
           "${system}" = {
-            nexus-tests = pkgs.runCommand "nexus-tests" { } ''
-              clojure -M:test
-            '';
+            nexus-tests = pkgs.mkShell {
+              buildInputs = [ pkgs.clojure ];
+              shellHook = ''
+                clojure -M:test
+              '';
+            };
           };
         };
 
