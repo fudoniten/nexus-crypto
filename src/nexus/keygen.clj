@@ -30,14 +30,20 @@
 
 (defn- write-key [{:keys [key filename]}]
   "Writes the encoded key to the specified filename."
-  (with-open [file (io/writer filename)]
-    (.write file (crypto/encode-key key))))
+  (try
+    (with-open [file (io/writer filename)]
+      (.write file (crypto/encode-key key)))
+    (catch Exception e
+      (throw (ex-info "Failed to write key to file" {:filename filename} e)))))
 
 (defn- gen-key [{:keys [algorithm seed]}]
   "Generates a cryptographic key using the specified algorithm and optional seed."
-  (if seed
-    (crypto/generate-key algorithm seed)
-    (crypto/generate-key algorithm)))
+  (try
+    (if seed
+      (crypto/generate-key algorithm seed)
+      (crypto/generate-key algorithm))
+    (catch Exception e
+      (throw (ex-info "Failed to generate key" {:algorithm algorithm :seed seed} e)))))
 
 (defn -main [& args]
   "Main entry point for the command-line utility. Parses arguments and generates a key file."
