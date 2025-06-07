@@ -10,7 +10,7 @@
   "Thread-local storage for KeyGenerator instances to ensure thread safety."
   (ThreadLocal.))
 
-(defn- generate-key-impl [algo rng]
+(defn generate-key-impl [algo rng]
   "Generates a cryptographic key using the specified algorithm and random number generator (rng)."
   (log/debug "Generating key with algorithm:" algo)
   (try

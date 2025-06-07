@@ -14,7 +14,7 @@
    ["-h" "--help"]
    ["-v" "--verbose" "Enable verbose logging."]])
 
-(defn- usage
+(defn usage
   "Generates a usage message for the command-line utility.
   Optionally includes error messages."
   ([summary] (usage summary []))
@@ -25,12 +25,12 @@
                                   summary])
                          (str/join \newline))))
 
-(defn- msg-quit [status msg]
+(defn msg-quit [status msg]
   "Prints a message and exits the program with the given status code."
   (println msg)
   (System/exit status))
 
-(defn- write-key [{:keys [key filename]}]
+(defn write-key [{:keys [key filename]}]
   "Writes the encoded key to the specified filename."
   (log/debug "Writing key to file:" {:filename filename})
   (try
@@ -39,7 +39,7 @@
     (catch Exception e
       (throw (ex-info "Failed to write key to file" {:filename filename} e)))))
 
-(defn- gen-key [{:keys [algorithm seed]}]
+(defn gen-key [{:keys [algorithm seed]}]
   "Generates a cryptographic key using the specified algorithm and optional seed."
   (try
     (if seed
