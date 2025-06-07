@@ -10,8 +10,9 @@
   "Thread-local storage for KeyGenerator instances to ensure thread safety."
   (ThreadLocal.))
 
-(defn generate-key-impl [algo rng]
+(defn generate-key-impl
   "Generates a cryptographic key using the specified algorithm and random number generator (rng)."
+  [algo rng]
   (log/debug "Generating key with algorithm:" algo)
   (try
     (let [gen (or (.get key-generator-thread-local)
@@ -25,14 +26,17 @@
 (defn generate-key
   "Generates a cryptographic key using the specified algorithm.
   Optionally accepts a seed for the random number generator."
-  ([algo]      (generate-key-impl algo (SecureRandom.)))
-  ([algo seed] (let [rng (-> seed
-                             (.getBytes)
-                             (SecureRandom.))]
-                 (generate-key-impl algo rng))))
+  ([algo]
+   (generate-key-impl algo (SecureRandom.)))
+  ([algo seed]
+   (let [rng (-> seed
+                 (.getBytes)
+                 (SecureRandom.))]
+     (generate-key-impl algo rng))))
 
-(defn encode-key [key]
+(defn encode-key
   "Encodes a cryptographic key into a Base64 string with its algorithm."
+  [key]
   (try
     (let [encoded-key (.encodeToString (Base64/getEncoder)
                                        (.getEncoded key))]
@@ -40,8 +44,9 @@
     (catch Exception e
       (throw (ex-info "Failed to encode cryptographic key" {:key key} e)))))
 
-(defn decode-key [key-str]
+(defn decode-key
   "Decodes a Base64 encoded key string back into a SecretKeySpec object."
+  [key-str]
   (try
     (let [[algo encoded-key] (.split key-str ":" 2)
           key-bytes (.decode (Base64/getDecoder) encoded-key)]
@@ -49,8 +54,9 @@
     (catch Exception e
       (throw (ex-info "Failed to decode cryptographic key" {:key-str key-str} e)))))
 
-(defn generate-signature [key data]
+(defn generate-signature
   "Generates a Base64 encoded signature for the given data using the specified key."
+  [key data]
   (try
     (let [algo (.getAlgorithm key)
           mac (doto (Mac/getInstance algo)
@@ -60,8 +66,9 @@
     (catch Exception e
       (throw (ex-info "Failed to generate signature" {:key key :data data} e)))))
 
-(defn validate-signature [key data sig]
+(defn validate-signature
   "Validates a signature by comparing it with a locally generated one for the given data and key."
+  [key data sig]
   (try
     (let [local-sig (generate-signature key data)]
       (.equals sig local-sig))
