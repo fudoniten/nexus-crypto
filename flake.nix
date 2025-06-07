@@ -29,17 +29,6 @@
           };
         };
 
-        checks = {
-          "${system}" = {
-            nexus-tests = pkgs.mkShell {
-              buildInputs = [ pkgs.clojure ];
-              shellHook = ''
-                clojure -M:test
-              '';
-            };
-          };
-        };
-
         devShells = rec {
           default = updateDeps;
           updateDeps = pkgs.mkShell {

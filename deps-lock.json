@@ -633,6 +633,16 @@
       "hash": "sha256-PLp+DcwIXEzpLd3/6iJhJP+sF4vnm9A3m1suMKlpy+o="
     },
     {
+      "mvn-path": "org/clojure/test.check/1.1.1/test.check-1.1.1.jar",
+      "mvn-repo": "https://repo1.maven.org/maven2/",
+      "hash": "sha256-lFEYFjssNVpfq5bJ69AShxUlVbsulkH1zZ7Qf+S8UHg="
+    },
+    {
+      "mvn-path": "org/clojure/test.check/1.1.1/test.check-1.1.1.pom",
+      "mvn-repo": "https://repo1.maven.org/maven2/",
+      "hash": "sha256-lqAC7Edw1pxWlVEJykIewELOc0+jdnf6rgvi8708xxc="
+    },
+    {
       "mvn-path": "org/clojure/tools.analyzer.jvm/1.2.2/tools.analyzer.jvm-1.2.2.jar",
       "mvn-repo": "https://repo1.maven.org/maven2/",
       "hash": "sha256-kQz/AjiTHtiIYstmWmd+ldk+hIDyIzIAiG0zHX7QDl4="
@@ -701,6 +711,16 @@
       "mvn-path": "org/clojure/tools.logging/1.2.4/tools.logging-1.2.4.pom",
       "mvn-repo": "https://repo1.maven.org/maven2/",
       "hash": "sha256-blrU/1STs92xl92GinrigNnJ0QAoqg4KnF2NkD7j1Po="
+    },
+    {
+      "mvn-path": "org/clojure/tools.logging/1.3.0/tools.logging-1.3.0.jar",
+      "mvn-repo": "https://repo1.maven.org/maven2/",
+      "hash": "sha256-gmlpt42a2jJ95rfaDxdkV9lWFPo4woAyZhDzGmtRXJE="
+    },
+    {
+      "mvn-path": "org/clojure/tools.logging/1.3.0/tools.logging-1.3.0.pom",
+      "mvn-repo": "https://repo1.maven.org/maven2/",
+      "hash": "sha256-E15H98p5wKoYG2kJPML50aYyKt1qgli2aXxQCNIwv00="
     },
     {
       "mvn-path": "org/clojure/tools.namespace/1.5.0/tools.namespace-1.5.0.jar",
