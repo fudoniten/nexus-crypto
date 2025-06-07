@@ -32,7 +32,7 @@
 
 (defn- write-key [{:keys [key filename]}]
   "Writes the encoded key to the specified filename."
-  (log/debug "Generating key with options:" {:algorithm algorithm :seed seed})
+  (log/debug "Writing key to file:" {:filename filename})
   (try
     (with-open [file (io/writer filename)]
       (.write file (crypto/encode-key key)))
