@@ -3,14 +3,16 @@
   (:require [nexus.crypto :as crypto]
             [clojure.tools.cli :as cli]
             [clojure.string :as str]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [clojure.tools.logging :as log])
   (:gen-class))
 
 (def cli-opts
   "Command-line options for the key generation utility."
   [["-a" "--algorithm ALGO" "Algorithm key to generate." :default "HmacSHA512"]
    ["-s" "--seed SEED"      "Seed used to generate key."]
-   ["-h" "--help"]])
+   ["-h" "--help"]
+   ["-v" "--verbose" "Enable verbose logging."]])
 
 (defn- usage
   "Generates a usage message for the command-line utility.
@@ -30,6 +32,8 @@
 
 (defn- write-key [{:keys [key filename]}]
   "Writes the encoded key to the specified filename."
+  (log/debug "Writing key to file:" filename)
+  (log/debug "Generating key with options:" {:algorithm algorithm :seed seed})
   (try
     (with-open [file (io/writer filename)]
       (.write file (crypto/encode-key key)))
@@ -48,6 +52,7 @@
 (defn -main [& args]
   "Main entry point for the command-line utility. Parses arguments and generates a key file."
   (let [{:keys [options arguments errors summary]} (cli/parse-opts args cli-opts)]
+    (when (:verbose options) (log/info "Verbose logging enabled"))
     (when (seq errors) (msg-quit 1 (usage summary errors)))
     (when (:help options) (msg-quit 0 (usage summary)))
     (when (not (= 1 (count arguments))) (msg-quit 1 (usage summary ["missing required paramater FILENAME"])))
