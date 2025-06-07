@@ -28,3 +28,10 @@
       (is (.exists (io/file "test-key.txt")))
       (finally
         (io/delete-file "test-key.txt")))))
+(ns nexus.test-runner
+  (:require [clojure.test :refer [run-tests]]
+            [nexus.crypto-test]
+            [nexus.keygen-test]))
+
+(defn -main []
+  (run-tests 'nexus.crypto-test 'nexus.keygen-test))
