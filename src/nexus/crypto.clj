@@ -4,8 +4,14 @@
            javax.crypto.spec.SecretKeySpec
            java.util.Base64))
 
+(def ^:private key-generator-thread-local
+  (ThreadLocal.))
+
 (defn- generate-key-impl [algo rng]
-  (let [gen (doto (KeyGenerator/getInstance algo) (.init rng))]
+  (let [gen (or (.get key-generator-thread-local)
+                (doto (KeyGenerator/getInstance algo)
+                  (.init rng)))]
+    (.set key-generator-thread-local gen)
     (.generateKey gen)))
 
 (defn generate-key
