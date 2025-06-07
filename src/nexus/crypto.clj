@@ -1,10 +1,10 @@
 (ns nexus.crypto
   "Cryptographic utilities for key generation, encoding, and signature operations."
+  (:require [clojure.tools.logging :as log])
   (:import java.security.SecureRandom
            (javax.crypto Mac KeyGenerator)
            (javax.crypto.spec SecretKeySpec)
-           java.util.Base64)
-  (:require [clojure.tools.logging :as log]))
+           java.util.Base64))
 
 (def ^:private key-generator-thread-local
   "Thread-local storage for KeyGenerator instances to ensure thread safety."
@@ -13,8 +13,6 @@
 (defn- generate-key-impl [algo rng]
   "Generates a cryptographic key using the specified algorithm and random number generator (rng)."
   (log/debug "Generating key with algorithm:" algo)
-  (log/debug "Generating signature for data:" data)
-  (log/debug "Validating signature for data:" data)
   (try
     (let [gen (or (.get key-generator-thread-local)
                   (doto (KeyGenerator/getInstance algo)
