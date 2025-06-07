@@ -29,6 +29,14 @@
           };
         };
 
+        checks = {
+          "${system}" = {
+            nexus-tests = pkgs.runCommand "nexus-tests" { } ''
+              clojure -M:test
+            '';
+          };
+        };
+
         devShells = rec {
           default = updateDeps;
           updateDeps = pkgs.mkShell {
