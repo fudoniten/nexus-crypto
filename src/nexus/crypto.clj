@@ -67,3 +67,63 @@
       (.equals sig local-sig))
     (catch Exception e
       (throw (ex-info "Failed to validate signature" {:key key :data data :signature sig} e)))))
+(ns nexus.crypto-test
+  (:require [clojure.test :refer :all]
+            [nexus.crypto :as crypto]))
+
+(deftest test-generate-key
+  (testing "Key generation with default algorithm"
+    (is (instance? javax.crypto.SecretKey (crypto/generate-key "HmacSHA512"))))
+  (testing "Key generation with seed"
+    (is (instance? javax.crypto.SecretKey (crypto/generate-key "HmacSHA512" "seed")))))
+
+(deftest test-encode-decode-key
+  (let [key (crypto/generate-key "HmacSHA512")
+        encoded (crypto/encode-key key)
+        decoded (crypto/decode-key encoded)]
+    (testing "Encoding and decoding key"
+      (is (= (.getAlgorithm key) (.getAlgorithm decoded)))
+      (is (= (.getEncoded key) (.getEncoded decoded))))))
+
+(deftest test-generate-signature
+  (let [key (crypto/generate-key "HmacSHA512")
+        data "test data"
+        signature (crypto/generate-signature key data)]
+    (testing "Signature generation"
+      (is (string? signature)))))
+
+(deftest test-validate-signature
+  (let [key (crypto/generate-key "HmacSHA512")
+        data "test data"
+        signature (crypto/generate-signature key data)]
+    (testing "Signature validation"
+      (is (crypto/validate-signature key data signature))
+      (is (not (crypto/validate-signature key "different data" signature))))))
+(ns nexus.keygen-test
+  (:require [clojure.test :refer :all]
+            [nexus.keygen :as keygen]
+            [nexus.crypto :as crypto]
+            [clojure.java.io :as io]))
+
+(deftest test-gen-key
+  (testing "Key generation with default algorithm"
+    (is (instance? javax.crypto.SecretKey (keygen/gen-key {:algorithm "HmacSHA512"}))))
+  (testing "Key generation with seed"
+    (is (instance? javax.crypto.SecretKey (keygen/gen-key {:algorithm "HmacSHA512" :seed "seed"})))))
+
+(deftest test-write-key
+  (let [key (crypto/generate-key "HmacSHA512")
+        filename "test-key.txt"]
+    (testing "Writing key to file"
+      (keygen/write-key {:key key :filename filename})
+      (is (.exists (io/file filename)))
+      (finally
+        (io/delete-file filename)))))
+
+(deftest test-main
+  (testing "Main function with verbose flag"
+    (with-out-str
+      (keygen/-main "-v" "-a" "HmacSHA512" "test-key.txt"))
+    (is (.exists (io/file "test-key.txt")))
+    (finally
+      (io/delete-file "test-key.txt"))))
